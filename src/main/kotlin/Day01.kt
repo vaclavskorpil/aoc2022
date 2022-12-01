@@ -1,5 +1,4 @@
-
-fun mostCalories(input: String): Int {
+fun topThreeCalories(input: String): Int {
     val elfCalories = input.split(regex = "\\n[\\n]+".toRegex())
 
     return elfCalories.map { elfcal ->
@@ -8,4 +7,7 @@ fun mostCalories(input: String): Int {
         .sortedDescending()
         .take(3)
         .sum()
+}
+fun main() {
+    println()
 }
