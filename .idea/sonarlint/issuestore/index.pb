@@ -15,4 +15,6 @@ X
 
 .gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
 H
-src/main/kotlin/Day01.kt,9/1/9134c45a53edecddc0329509d3098e4fedd3cb67
+src/main/kotlin/Day03.kt,5/3/535731d81f122526ff099bf222593c8919fb2e0a
+H
+src/main/kotlin/Day04.kt,2/b/2b2097ec23677fded8c590b543272783af3894e8
