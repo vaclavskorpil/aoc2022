@@ -5,9 +5,27 @@ sealed interface Node {
     val parentNode: Node?
 
     class Dir(override val path: String, override val parentNode: Dir?) : Node {
+        init {
+            parentNode?.addChild(this)
+        }
+
+        val children: MutableList<Node> = mutableListOf()
+
+        override val size: Long by lazy {
+            children.sumOf { it.size }
+        }
+
+        fun dirs(): List<Dir> {
+            val dirs = children.mapNotNull { it as? Dir }
+            return dirs + dirs.flatMap { it.dirs() }
+        }
+
+        fun addChild(node: Node) {
+            children.add(node)
+        }
 
         fun print(i: Int) {
-            val ident = (0..i * 3).joinToString("") { " " }
+            val ident = (0 until (i * 3)).joinToString("") { " " }
 
             println("$ident - $path (Dir, size = $size)")
             children.forEach {
@@ -18,26 +36,6 @@ sealed interface Node {
             }
 
         }
-
-        fun dirs(): List<Dir> {
-            val dirs = children.mapNotNull { it as? Dir }
-            return dirs + dirs.flatMap { it.dirs() }
-        }
-
-        val children: MutableList<Node> = mutableListOf()
-
-        override val size: Long by lazy {
-            children.sumOf { it.size }
-        }
-
-        init {
-            parentNode?.addChild(this)
-        }
-
-        fun addChild(node: Node) {
-            children.add(node)
-        }
-
     }
 
     class File(override val path: String, override val size: Long, override val parentNode: Node?) : Node
@@ -60,6 +58,7 @@ sealed interface Command {
                     split[2] == ".." -> CDUP
                     else -> CD(split[2])
                 }
+
                 split[0].startsWith("dir") -> Dir(split[1])
 
                 else -> File(split[0].toLong(), split[1])
@@ -98,6 +97,8 @@ fun main() {
     }
 
     val tree = createTree(readAsSequence("Day07_input"))
+
+    tree.print(1)
 
     fun part1() = tree.dirs().filter { it.size <= 100000 }.sumOf { it.size }
     fun part2() = tree.dirs().sortedBy { it.size }.first { (70000000 - (tree.size - it.size)) > 30000000 }.size
