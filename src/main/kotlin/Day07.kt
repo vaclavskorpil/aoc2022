@@ -98,7 +98,7 @@ fun main() {
 
     val tree = createTree(readAsSequence("Day07_input"))
 
-    tree.print(1)
+    tree.print(0)
 
     fun part1() = tree.dirs().filter { it.size <= 100000 }.sumOf { it.size }
     fun part2() = tree.dirs().sortedBy { it.size }.first { (70000000 - (tree.size - it.size)) > 30000000 }.size
